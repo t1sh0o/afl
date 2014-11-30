@@ -47,4 +47,9 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	{
 		return $this->hasOne('Player');
 	}
+
+	public function isSubscribedFor($matchId)
+	{
+		return Subscription::where('match_id', $matchId)->where('player_id', $this->id)->get()->toArray() ? true : false;
+	}
 }

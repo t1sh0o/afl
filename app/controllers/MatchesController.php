@@ -23,7 +23,7 @@ class MatchesController extends \BaseController {
 	 */
 	public function index()
 	{
-		$matchTypes = MatchType::all();
+		$matchTypes = MatchType::all()->toArray();
 
 		foreach ($matchTypes as $matchType) {
 			$types[$matchType['id']] = $matchType['match_type'];
@@ -33,7 +33,7 @@ class MatchesController extends \BaseController {
 
 		$matches->load('matchType');
 
-		return View::make('matches', ['matches' => $matches, 'matchTypes' => $types ]);
+		return View::make('matches', ['matches' => $matches, 'matchTypes' => $types]);
 	}
 
 	/**
