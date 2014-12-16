@@ -5,30 +5,33 @@
 	<div class="col-md-12">
 		<div class="well">
 
-			<h3>Subscriptions</h3>
-
-			@forelse ($subscriptions as $subscription)
-				<div class="input-group input-group-lg">
-					<span class="input-group-addon">
-						{{ $subscription['match']['match_type']['match_type'] }}
-					</span>
-					
-					<span class="input-group-addon">
-						{{ $subscription['match']['location'] }}
-					</span>
-					
-					<span class="input-group-addon">
-						{{ $subscription['match']['date'] }}
-					</span>
-
-					<span class="input-group-addon ">
-						{{ link_to_route(	'unsubsciption_path', 'Unsubscribe', $subscription['id'], ['class' => 'btn btn-danger']) }}
-					</span>
+			@if (count($subscriptions) > 0)
+				<h3>Subscriptions</h3>
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Match type</th>
+								<th>Match location</th>
+								<th>Match date</th>
+								<th>Commands</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach ($subscriptions as $subscription)
+								<tr>
+									<td>{{ $subscription['match']['match_type']['match_type'] }}</td>
+									<td>{{ $subscription['match']['location'] }}</td>
+									<td>{{ $subscription['match']['date'] }}</td>
+									<td>{{ link_to_route('unsubsciption_path', 'Unsubscribe', $subscription['id'], ['class' => 'btn btn-danger']) }}</td>
+								</tr>	
+							@endforeach
+						</tbody>
+					</table>
 				</div>
-				<hr/>
-			@empty
-				<h4>There are no matches you've subscribed for!</h4>
-			@endforelse
+			@else
+				<h4>There are no matches you've subscribed for!</h4>	
+			@endif
 		</div>
 	</div>
 </div>	

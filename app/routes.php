@@ -44,9 +44,9 @@ Route::get('logout', [
 		'uses' => 'SessionsController@destroy'
 ]);
 
-Route::get('admin', [
-		'as' => 'admin_path',
-		'uses' => 'RegistrationController@index'
+Route::get('players', [
+		'as' => 'players_path',
+		'uses' => 'PlayersController@index'
 ])->before('auth|admin');
 
 Route::get('matches', [
@@ -80,7 +80,8 @@ Route::get('subscriptions', [
 		'uses' => 'SubscriptionController@index'
 ]);
 
-
+Route::get('players/{id}/increase_skill', 'PlayersController@increaseSkills');
+Route::get('players/{id}/decrease_skill', 'PlayersController@decreaseSkills');
 
 
 

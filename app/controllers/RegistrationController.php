@@ -17,20 +17,6 @@ class RegistrationController extends \BaseController {
 	}
 
 	/**
-	 * Get all users from the database
-	 * 		
-	 * @return view
-	 */
-	public function index()
-	{
-		$users = User::all();
-
-		$users->load('player');
-
-		return View::make('admin.users')->withUsers($users);
-	}
-
-	/**
 	* Show the form for registering a new user
 	* GET /registration/create
 	*

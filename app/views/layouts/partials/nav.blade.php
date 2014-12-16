@@ -14,7 +14,7 @@
 				@if ($currentUser)
 					<li>{{ link_to_route('matches_path', 'Matches') }}</li>
 					@if ($currentUser->isAdmin())
-						<li>{{ link_to_route('admin_path', 'Admin Panel') }}</li>
+						<li>{{ link_to_route('players_path', 'Players') }}</li>
 					@endif
 				@endif
 			</ul>
