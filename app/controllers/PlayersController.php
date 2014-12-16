@@ -8,7 +8,8 @@ class PlayersController extends \BaseController {
 	{
 		$this->player = $player;
 
-		$this->beforeFilter('auth|admin');
+		$this->beforeFilter('auth');
+		$this->beforeFilter('admin');
 	}
 
 	/**
