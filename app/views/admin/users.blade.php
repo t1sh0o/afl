@@ -27,8 +27,8 @@
 									<td>{{ $user['player']['matches_played'] }}</td>
 									@if ($currentUser->isAdmin())
 										<td>
-											{{ link_to_action('PlayersController@increaseSkills', '+', [$user['player']['id']], ['class' => 'btn btn-success']) }} | 
-											{{ link_to_action('PlayersController@decreaseSkills', '-', [$user['player']['id']], ['class' => 'btn btn-danger']) }}
+											{{ link_to_route('update_player_path', '+', [$user['player']['id'], 1], ['class' => 'btn btn-success']) }}
+											{{ link_to_route('update_player_path', '-', [$user['player']['id'], -1], ['class' => 'btn btn-danger']) }}
 										</td>
 									@endif
 								</tr>	

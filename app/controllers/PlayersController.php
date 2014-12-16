@@ -7,6 +7,8 @@ class PlayersController extends \BaseController {
 	public function __construct(Player $player)
 	{
 		$this->player = $player;
+
+		$this->beforeFilter('auth|admin');
 	}
 
 	/**
@@ -21,29 +23,6 @@ class PlayersController extends \BaseController {
 		$users->load('player');
 
 		return View::make('admin.users')->withUsers($users);
-	}
-
-	public function increaseSkills($id)
-	{
-		$player = $this->player->findOrFail($id);
-
-		$player->skill++;
-
-		$player->save();
-
-		return Redirect::route('players_path');
-	}
-
-
-	public function decreaseSkills($id)
-	{
-		$player = $this->player->findOrFail($id);
-
-		$player->skill--;
-
-		$player->save();
-
-		return Redirect::route('players_path');
 	}
 
 	/**
@@ -93,15 +72,22 @@ class PlayersController extends \BaseController {
 	}
 
 	/**
-	 * Update the specified resource in storage.
-	 * PUT /players/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
+	 * Update player with $id with passed $skill
+	 * @param int $id 
+	 * @param int $skill 
+	 * @return view
 	 */
-	public function update($id)
+	public function update($id, $skill)
 	{
-		//
+		$player = $this->player->findOrFail($id);
+
+		$player->skill += $skill;
+
+		if ($player->skillsInRange($player->skill)) {
+			$player->save();
+		}		
+
+		return Redirect::route('players_path');
 	}
 
 	/**
