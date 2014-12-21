@@ -80,7 +80,7 @@ class MatchesController extends \BaseController {
 
 		$players = $this->getSubscribedPlayers($id);
 
-		return View::make('matches.show', compact('match', 'players'));
+		return View::make('matches.show', compact('match', 'players', 'subscription'));
 	}
 
 	/**

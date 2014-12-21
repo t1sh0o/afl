@@ -2,14 +2,18 @@
 
 @section('content')
 	<div>{{ $match['match_type']['match_type']}}</div>
-	<div>{{ link_to_route(	'subsciption_path', 'Subscribe', 
-		['match_id' => $match['id'], 'user_id' => $currentUser['id']], ['class' => 'btn btn-success']) }}
-	</div>
+	
+	@if ( ! $currentUser->isSubscribedFor($match['id']))
+		<div>{{ link_to_route('subsciption_path', 'Subscribe', 
+			['match_id' => $match['id'], 'user_id' => $currentUser['id']], ['class' => 'btn btn-success']) }}
+		</div>
+	@endif
+
 	<div>{{$match['location']}}</div>
 	<div>{{$match['date']}}</div>
 	<hr/>
 
-	<div class="col-md-6 well">
+	<div class="col-md-6">
 		<h3>Subscriber players:</h3>
 
 		@if (count($players) > 0)
@@ -24,12 +28,12 @@
 
 	</div>
 
-	<div class="col-md-6 well">
+	<div class="col-md-6">
 		<h3>Teams:</h3>
 	</div>
 
 
-	<div class="col-md-12 well">
+	<div class="col-md-12">
 		<h3>Comments:</h3>
 	</div>
 @stop
