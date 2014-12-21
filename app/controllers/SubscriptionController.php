@@ -1,12 +1,19 @@
 <?php
 
+use AFL\Repositories\SubscriptionsReposotory;
+use AFL\Repositories\PlayersRepository;
+
+
 class SubscriptionController extends \BaseController {
 
-	private $subscription;
-
-	public function __construct(Subscription $subscription)
+	/**	
+	 * @var Subscritions repository
+	 */
+	private $repository;
+	
+	public function __construct(SubscriptionsReposotory $repository)
 	{
-		$this->subscription = $subscription;
+		$this->repository = $repository;
 
 		$this->beforeFilter('auth');
 	}
@@ -19,28 +26,11 @@ class SubscriptionController extends \BaseController {
 	 */
 	public function index()
 	{
-		$player_id = $this->getPlayersId(Auth::user()->id);
-
-		$subscriptions = $this->subscription->where('player_id', '=', $player_id)->get();
-
-		$subscriptions->load('match');
-
-		foreach ($subscriptions as $subscription) {
-			$subscription['match']->load('matchType');
-		}
+		$playerId = $this->getPlayerId(Auth::user()->id);
+	
+		$subscriptions = $this->repository->getAllPlayersSubscriptions($playerId);
 
 		return View::make('user.subscriptions')->withSubscriptions($subscriptions);
-	}
-
-	/**
-	 * Show the form for creating a new resource.
-	 * GET /subscription/create
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
 	}
 
 	/**
@@ -49,51 +39,15 @@ class SubscriptionController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function store($match_id, $user_id)
+	public function store($matchId, $userId)
 	{
-		$player_id = $this->getPlayersId($user_id);
+		$playerId = $this->getPlayerId($userId);
 
-		$subscriptionData = compact('match_id', 'player_id');
+		$subscriptionData = ['match_id' => $matchId, 'player_id' => $playerId];
 		
-		$this->subscription->create($subscriptionData);
+		$this->repository->subscribe($subscriptionData);
 
 		return Redirect::route('subsciptions_path');
-	}
-
-	/**
-	 * Display the specified resource.
-	 * GET /subscription/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 * GET /subscription/{id}/edit
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 * PUT /subscription/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
 	}
 
 	/**
@@ -105,22 +59,31 @@ class SubscriptionController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		$subs = $this->subscription->findOrFail($id);
+		$subs = $this->repository->findSubscriptionById($id);
 
 		if($subs->delete($id)) {
 			Flash::message('You will not be counted for this match!');
 
 			return Redirect::back();
 		}
+		
+		Flash::error('We were unable to unsubscribe you!');
 
-		return 'not ok' . $id;
+		return Redirect::back();
 	}
 
-	public function getPlayersId($userId)
-	{
-		$player = Player::where('user_id', $userId)->first();
 
-		return $player['id'];
+	/**
+	 * returns players Id 
+	 * 
+	 * @param  int $userId 
+	 * @return int         
+	 */
+	private function getPlayerId($userId)
+	{
+		$playersRepository = new PlayersRepository(new Player());
+
+		return $playersRepository->getPlayerIdByUserId($userId);
 	}
 
 }

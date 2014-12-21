@@ -6,7 +6,7 @@
 	<div class="input-group">
 		<span class="input-group-addon">
 			{{ Form::label('matchType', 'Match Type:') }}
-			{{ Form::select('match_type_id', $matchTypes, 2, ['class' => 'form-control']) }}
+			{{ Form::select('id', $matchTypes, 2, ['class' => 'form-control']) }}
 		</span>
 		
 		<span class="input-group-addon">

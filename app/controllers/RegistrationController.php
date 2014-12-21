@@ -1,6 +1,7 @@
 <?php
 
 use AFL\FormValidations\RegistrationForm;
+use AFL\Services\RegistrationService;
 
 class RegistrationController extends \BaseController {
 
@@ -9,11 +10,15 @@ class RegistrationController extends \BaseController {
 	*/
 	private $registrationForm;
 	
-	public function __construct(RegistrationForm $registrationForm)
+	private $registrationService;
+
+	public function __construct(RegistrationForm $registrationForm, RegistrationService $registrationService)
 	{
 		$this->registrationForm = $registrationForm;
 	
-		$this->beforeFilter('guest', ['except' => 'index']);
+		$this->registrationService = $registrationService;
+
+		$this->beforeFilter('guest');
 	}
 
 	/**
@@ -39,14 +44,8 @@ class RegistrationController extends \BaseController {
 
 		$this->registrationForm->validate($userData);
 
-		$user = User::create($userData);
-
-		$player = Player::create(['user_id' => $user['id']]);
-
-		Auth::login($user);
-
-		Flash::success('You have successfully registered in AFL site.<br/> Now you can subscribe to play with us.');
-
+		$this->registrationService->register($userData);
+		
 		return Redirect::home();
 	}
 }

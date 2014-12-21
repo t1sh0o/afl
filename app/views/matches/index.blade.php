@@ -27,7 +27,7 @@
 										<td>{{ $match['date'] }}</td>
 										<td>
 											{{ link_to_route(	'subsciption_path', 'Subscribe', 
-																['match_id' => $match['id'], 'user_id' => $currentUser['id']], 
+																['matchId' => $match['id'], 'userId' => $currentUser['id']], 
 																['class' => 'btn btn-success']) }}
 									
 											@if ($currentUser->isAdmin())

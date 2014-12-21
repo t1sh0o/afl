@@ -32,8 +32,4 @@
 		<h3>Teams:</h3>
 	</div>
 
-
-	<div class="col-md-12">
-		<h3>Comments:</h3>
-	</div>
 @stop

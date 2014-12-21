@@ -1,12 +1,14 @@
 <?php
 
+use AFL\Repositories\PlayersRepository;
+
 class PlayersController extends \BaseController {
 
-	public $player;
+	public $repository;
 
-	public function __construct(Player $player)
+	public function __construct(Player $player, PlayersRepository $playersRepository)
 	{
-		$this->player = $player;
+		$this->repository = $playersRepository;
 
 		$this->beforeFilter('auth');
 		$this->beforeFilter('admin');
@@ -19,57 +21,9 @@ class PlayersController extends \BaseController {
 	 */
 	public function index()
 	{
-		$users = User::all();
-
-		$users->load('player');
-
-		return View::make('admin.users')->withUsers($users);
-	}
-
-	/**
-	 * Show the form for creating a new resource.
-	 * GET /players/create
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
-
-	/**
-	 * Store a newly created resource in storage.
-	 * POST /players
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
-
-	/**
-	 * Display the specified resource.
-	 * GET /players/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 * GET /players/{id}/edit
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
+		$players = $this->repository->getAllPlayersWithUsernames();
+		
+		return View::make('admin.players')->withPlayers($players);
 	}
 
 	/**
@@ -80,7 +34,7 @@ class PlayersController extends \BaseController {
 	 */
 	public function update($id, $skill)
 	{
-		$player = $this->player->findOrFail($id);
+		$player = $this->repository->getPlayer($id);
 
 		$player->skill += $skill;
 
@@ -89,18 +43,6 @@ class PlayersController extends \BaseController {
 		}		
 
 		return Redirect::route('players_path');
-	}
-
-	/**
-	 * Remove the specified resource from storage.
-	 * DELETE /players/{id}
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
 	}
 
 }
