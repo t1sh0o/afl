@@ -19,7 +19,9 @@ class SubscriptionController extends \BaseController {
 	 */
 	public function index()
 	{
-		$subscriptions = $this->subscription->where('player_id', '=', Auth::user()->id)->get();
+		$player_id = $this->getPlayersId(Auth::user()->id);
+
+		$subscriptions = $this->subscription->where('player_id', '=', $player_id)->get();
 
 		$subscriptions->load('match');
 
@@ -47,8 +49,10 @@ class SubscriptionController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function store($match_id, $player_id)
+	public function store($match_id, $user_id)
 	{
+		$player_id = $this->getPlayersId($user_id);
+
 		$subscriptionData = compact('match_id', 'player_id');
 		
 		$this->subscription->create($subscriptionData);
@@ -110,6 +114,13 @@ class SubscriptionController extends \BaseController {
 		}
 
 		return 'not ok' . $id;
+	}
+
+	public function getPlayersId($userId)
+	{
+		$player = Player::where('user_id', $userId)->first();
+
+		return $player['id'];
 	}
 
 }

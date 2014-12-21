@@ -49,6 +49,11 @@ Route::get('matches', [
 		'uses' => 'MatchesController@index'
 ]);
 
+Route::get('matches/{id}', [
+		'as' => 'match_path',
+		'uses' => 'MatchesController@show'
+]);
+
 Route::post('matches', [
 		'as' => 'match_path',
 		'uses' => 'MatchesController@store'
@@ -60,7 +65,7 @@ Route::get('remove_match/{id}', [
 ]);
 
 
-Route::get('subscribe/{matchId}/{playerId}', [
+Route::get('subscribe/{matchId}/{userId}', [
 		'as' => 'subsciption_path',
 		'uses' => 'SubscriptionController@store'
 ]);

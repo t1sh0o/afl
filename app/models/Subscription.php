@@ -13,7 +13,7 @@ class Subscription extends \Eloquent {
 
 	public function player()
 	{
-		return $this->hasOne('Player');
+		return $this->hasOne('Player', 'id', 'player_id');
 	}
 
 }

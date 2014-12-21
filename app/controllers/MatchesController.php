@@ -74,7 +74,13 @@ class MatchesController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		//
+		$match = Match::findOrFail($id);
+
+		$match->load('matchType');
+
+		$players = $this->getSubscribedPlayers($id);
+
+		return View::make('matches.show', compact('match', 'players'));
 	}
 
 	/**
@@ -117,6 +123,21 @@ class MatchesController extends \BaseController {
 
 			return Redirect::back(); 	
 		}
+	}
+
+	public function getSubscribedPlayers($matchId)
+	{
+		$subscriptions = Subscription::where('match_id', $matchId)->get();
+
+		$players = $subscriptions->load('player');	
+
+		$player_ids = [];
+
+		foreach ($players as $player) {
+			array_push($player_ids, $player['player']['user_id']);
+		}
+
+		return User::whereIn('id',  $player_ids)->get();
 	}
 
 }

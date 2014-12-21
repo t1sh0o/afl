@@ -20,7 +20,7 @@
 						<tbody>
 							@foreach ($subscriptions as $subscription)
 								<tr>
-									<td>{{ $subscription['match']['match_type']['match_type'] }}</td>
+									<td>{{ link_to_action('MatchesController@show', $subscription['match']['match_type']['match_type'], [$subscription['match']['id']] )  }}</td>	
 									<td>{{ $subscription['match']['location'] }}</td>
 									<td>{{ $subscription['match']['date'] }}</td>
 									<td>{{ link_to_route('unsubsciption_path', 'Unsubscribe', $subscription['id'], ['class' => 'btn btn-danger']) }}</td>

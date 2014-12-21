@@ -22,12 +22,12 @@
 							@foreach ($matches as $match)
 								@if ( ! $currentUser->isSubscribedFor($match['id']))
 									<tr>
-										<td>{{ $match['match_type']['match_type'] }}</td>
+										<td>{{ link_to_action('MatchesController@show', $match['match_type']['match_type'], [$match['id']] )  }}</td>
 										<td>{{ $match['location'] }}</td>
 										<td>{{ $match['date'] }}</td>
 										<td>
 											{{ link_to_route(	'subsciption_path', 'Subscribe', 
-																['match_id' => $match['id'], 'player_id' => $currentUser['id']], 
+																['match_id' => $match['id'], 'user_id' => $currentUser['id']], 
 																['class' => 'btn btn-success']) }}
 									
 											@if ($currentUser->isAdmin())
