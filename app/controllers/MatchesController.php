@@ -129,6 +129,10 @@ class MatchesController extends \BaseController {
 	{
 		$subscriptions = Subscription::where('match_id', $matchId)->get();
 
+		if( ! $subscriptions->toArray()) {
+			return null;
+		}
+
 		$players = $subscriptions->load('player');	
 
 		$player_ids = [];
